@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToDoListApp.Server.DbContext;
 using ToDoListApp.Server.Entities;
 using ToDoListApp.Server.Models.DTO;
+using ToDoListApp.Server.Repositories.Interface;
 
 namespace ToDoListApp.Server.Controllers
 {
@@ -11,14 +12,13 @@ namespace ToDoListApp.Server.Controllers
     [Route("api/[controller]")]
     public class TodoItemController : Controller
     {
+        private readonly ITodoItemRepository todoItemRepository;
+
         //TODO : CRUD METHODS
 
-        // Constructor
-        private readonly ToDoListAppDbContext dbContext;
-
-        public TodoItemController(ToDoListAppDbContext dbContext)
+        public TodoItemController(ITodoItemRepository todoItemRepository)
         {
-            this.dbContext = dbContext;
+            this.todoItemRepository = todoItemRepository;
         }
 
         // CREATE
@@ -32,9 +32,7 @@ namespace ToDoListApp.Server.Controllers
                 Content = request.Content
             };
 
-            // Injecteted services ( save the changes on database using SaveChangesAsync )
-            await dbContext.ToDoItems.AddAsync(toDoItem);
-            await dbContext.SaveChangesAsync();
+            await todoItemRepository.CreateAsync(toDoItem);
 
             // Domain model to DTO 
             var response = new TodoItemDto
@@ -42,13 +40,12 @@ namespace ToDoListApp.Server.Controllers
                 Id = toDoItem.Id,
                 Title = toDoItem.Title,
                 Content = toDoItem.Content,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
             };
 
             return Ok(response);
         }
-
     }
 }
  

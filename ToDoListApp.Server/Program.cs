@@ -3,6 +3,8 @@ using ToDoListApp.Server.DbContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ToDoListApp.Server.Repositories.Interface;
+using ToDoListApp.Server.Repositories.Implementation;
 
 
 namespace ToDoListApp.Server
@@ -25,6 +27,9 @@ namespace ToDoListApp.Server
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("TodoListConnectionString"));
             });
+            
+            //
+            builder.Services.AddScoped<ITodoItemRepository, ToDoItemRepository>();
 
             var app = builder.Build();
 

@@ -4,6 +4,6 @@ namespace ToDoListApp.Server.Repositories.Interface
 {
     public interface ITodoItemRepository
     {
-        Task<ToDoItem> CreateAsync(ToDoItem item);
+        Task<ToDoItem> CreateAsync(ToDoItem toDoItem);
     }
 }

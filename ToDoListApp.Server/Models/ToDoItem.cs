@@ -10,5 +10,11 @@ namespace ToDoListApp.Server.Entities
         public string Content { get; set; } = "";
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        public ToDoItem()
+        { 
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }
