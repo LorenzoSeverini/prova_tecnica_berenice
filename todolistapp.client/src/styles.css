@@ -1,1 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+/*************/
+/* Global CSS */
+/*************/
+:root {
+  --primary-color: #374151;
+  --secondary-color: #555f6d;
+  --tertiary-color: #a72045;
+  --quaternary-color: #b9b1b5;
+  --a-color-hover: #a72045;
+  --title-color: #9fa1a7;
+  --card-color: #8181c0;
+  --section-color: #59595f;
+
+  --font: "Roboto", sans-serif;
+  --font-size: 1rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font);
+  font-size: var(--font-size);
+  background-color: var(--primary-color);
+  color: var(--quaternary-color);
+}
+
+a {
+  color: var(--quaternary-color);
+  text-decoration: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+  color: var(--a-color-hover);
+}
+
+strong {
+  color: var(--tertiary-color);
+}
