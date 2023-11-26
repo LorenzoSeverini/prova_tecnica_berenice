@@ -104,8 +104,8 @@ namespace ToDoListApp.Server.Controllers
                 Title = existingToDoItem.Title,
                 Content = existingToDoItem.Content,
                 IsMarked = existingToDoItem.IsMarked,
-                CreatedAt= DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
+                CreatedAt= existingToDoItem.CreatedAt,
+                UpdatedAt = existingToDoItem.UpdatedAt,
 
             };
 
@@ -168,7 +168,7 @@ namespace ToDoListApp.Server.Controllers
                 Title = toDoItem.Title,
                 Content = toDoItem.Content,
                 IsMarked = toDoItem.IsMarked,
-                CreatedAt= DateTime.UtcNow,
+                CreatedAt= toDoItem.CreatedAt,
                 UpdatedAt= DateTime.UtcNow,
             };
 
