@@ -2,6 +2,34 @@
 
 <!-- async pipe -> is sub on this todoitems observable -->
 <ng-container *ngIf="toDoItems$ | async as toDoItems">
+
+  <!-- add new todoitem -->
+  <!---------------------->
+  <!-- Form for adding a new to-do item -->
+  <form (ngSubmit)="onSubmitNewToDoItem()" class="AddNewToDoItem">
+    <!-- new title -->
+    <div class="field addNewTitle">
+      <h4 class="fieldtitle">New Task</h4>
+      <!-- error for title -->
+      <div *ngIf="titleErrorMessage" class="error-message">
+        {{ titleErrorMessage }}
+      </div>
+      <input type="text" class="text" placeholder="What do you have planned?" [(ngModel)]="newToDoItemTitle" name="newTitle"/>
+    </div>
+    <!-- new content -->
+    <div class="field addNewContent">
+      <h4 class="fieldtitle">New Description</h4>
+      <!-- error for content -->
+      <div *ngIf="contentErrorMessage" class="error-message">
+        {{ contentErrorMessage }}
+      </div>
+      <input type="text" class="text" placeholder="Write a description" [(ngModel)]="newToDoItemContent" name="newContent"/>
+    </div>
+    <button [disabled]="isAddButtonDisabled()" class="myBtn myBtnSave" type="submit">Add</button>
+  </form>
+
+  <!--------------------->
+  <!-- To do item view -->
   <div class="cardContainer">
     <div class="card" *ngFor="let toDoItem of toDoItems">
       <div class="cardBody">
@@ -38,12 +66,12 @@
         </div>
         <!-- created at  -->
         <div class="field">
-          <h4 class="fieldtitle">Created</h4>
+          <h4 class="fieldtitle">Date of creation</h4>
           <div class="text">{{toDoItem.createdAt | date: 'MM/dd/yyyy HH:mm'}}</div>
         </div>
         <!-- updated at -->
         <div class="field">
-          <h4 class="fieldtitle">Upadate</h4>
+          <h4 class="fieldtitle">Last changes</h4>
           <div class="text">{{toDoItem.updatedAt| date: 'MM/dd/yyyy HH:mm'}}</div>
         </div>
         <!-- edit button -->
@@ -56,25 +84,5 @@
         <button *ngIf="isInEditMode(toDoItem.id.toString())" class="myBtn myBtnCancel" (click)="onCancel()">Cancel</button>
       </div>
     </div>
-  </div>
-
-  <!-- add new todoitem -->
-  <!-- Button to toggle adding a new item -->
-  <button *ngIf="!isAddingNew" class="myBtn myBtnAddNew" (click)="toggleAddNew()">Add New</button>
-
-  <!-- Form for adding a new to-do item -->
-  <div *ngIf="isAddingNew">
-    <form (ngSubmit)="onSubmitNewToDoItem()">
-      <div class="field">
-        <h4 class="fieldtitle">New Task</h4>
-        <input type="text" class="text" placeholder="Enter title" [(ngModel)]="newToDoItemTitle" name="newTitle"/>
-      </div>
-      <div class="field">
-        <h4 class="fieldtitle">New Description</h4>
-        <input type="text" class="text" placeholder="Enter description" [(ngModel)]="newToDoItemContent" name="newContent"/>
-      </div>
-      <button class="myBtn myBtnSave" type="submit">Add</button>
-      <button type="submit" class="myBtn myBtnCancel" (click)="cancelAddNew()">Cancel</button>
-    </form>
   </div>
 </ng-container>
