@@ -40,6 +40,14 @@ namespace ToDoListApp.Server
 
             app.UseHttpsRedirection();
 
+            // cors (technicaly the api now is public) 
+            app.UseCors(options =>
+            {
+                options.AllowAnyHeader();
+                options.AllowAnyMethod();
+                options.AllowAnyOrigin();
+            });
+
             app.UseAuthorization();
 
             app.MapControllers();
