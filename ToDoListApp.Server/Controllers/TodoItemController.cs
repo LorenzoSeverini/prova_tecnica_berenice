@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ToDoListApp.Server.DbContext;
 using ToDoListApp.Server.Entities;
 using ToDoListApp.Server.Models.DTO;
@@ -7,7 +9,7 @@ using ToDoListApp.Server.Repositories.Interface;
 
 namespace ToDoListApp.Server.Controllers
 {
-    // https://localhost:xxxx/api/todo
+    // https://localhost:xxxx/api/ToDoItem
     [ApiController]
     [Route("api/[controller]")]
     public class TodoItemController : Controller
@@ -21,7 +23,38 @@ namespace ToDoListApp.Server.Controllers
             this.todoItemRepository = todoItemRepository;
         }
 
+        //----------------------------------------
+        // Http method for view all (to do item)
+        // VIEW All
+        // GET: https://localhost:7259/api/TodoItem
+        [HttpGet]
+        public async Task<IActionResult> GetAllToDoItems()
+        {
+           var toDoItem = await todoItemRepository.GetAllAsync();
+
+           // map domain model to dto 
+           var response = new List<TodoItemDto>();
+
+           foreach (var item in toDoItem)
+            {
+                response.Add(new TodoItemDto
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    Content = item.Content,
+                    IsMarked = item.IsMarked,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                });
+            }
+
+           return Ok(response);
+        }
+
+        //----------------------------------------
+        // Http method for create a new (to do item)
         // CREATE
+        // Post: api/TodoItem
         [HttpPost]
         public async Task<IActionResult> CreateTodoItem(CreateTodoItemRequestDto request)
         {
@@ -40,8 +73,39 @@ namespace ToDoListApp.Server.Controllers
                 Id = toDoItem.Id,
                 Title = toDoItem.Title,
                 Content = toDoItem.Content,
+                IsMarked = toDoItem.IsMarked,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
+            };
+
+            return Ok(response);
+        }
+
+        //----------------------------------------
+        // Http method for get a single id
+        // Get:  https://localhost:7259/api/TodoItem/{id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetToDoItemById([FromRoute] Guid id) 
+        {
+            var existingToDoItem = await todoItemRepository.GetById(id);
+
+            // if is not found 
+            if (existingToDoItem == null)
+            {
+                return NotFound();
+            }
+
+            // if is found
+            var response = new TodoItemDto
+            {
+                Id= existingToDoItem.Id,
+                Title = existingToDoItem.Title,
+                Content = existingToDoItem.Content,
+                IsMarked = existingToDoItem.IsMarked,
+                CreatedAt= DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+
             };
 
             return Ok(response);
