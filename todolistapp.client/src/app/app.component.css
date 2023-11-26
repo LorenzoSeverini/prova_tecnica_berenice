@@ -1,22 +1,16 @@
-﻿:host {
-    max-width: 1280px;
-    padding: 2rem;
-    text-align: center;
+﻿/************************/
+header {
+  height: 9.375rem;;
 }
 
-tr:nth-child(even) {
-    background: #F2F2F2;
+header h1 {
+  color: var(--title-color);
+  font-size: 4em;
+  font-weight: 100;
 }
 
-tr:nth-child(odd) {
-    background: #FFF;
+main {
+  height: calc(100vh - 9.375rem);
+  padding-top: 3rem;
 }
 
-th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-table {
-    margin: 0 auto;
-}
