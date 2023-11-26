@@ -3,6 +3,44 @@ h1 {
   margin-bottom: 3rem;
 }
 
+input {
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--success-color);
+  border-radius: .5rem;
+  border: 2px solid var(--quaternary-color);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .addNewContent, .addNewTitle {
+
+} */
+
+/********************
+  Add new To Do Item
+*********************/
+.AddNewToDoItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  background-color: var(--section-color);
+  border-radius: .5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  cursor: pointer;
+}
+
 /*********
   Card
 ***********/
@@ -46,13 +84,6 @@ h1 {
   color: var(--quaternary-color);
 }
 
-input {
-  appearance: none;
-  border: none;
-  outline: none;
-  background: none;
-}
-
 /*********
   Buttton
 ***********/
@@ -68,11 +99,11 @@ input {
   transform: scale(1.05);
 }
 
-.myBtnEdit {
+.myBtnEdit, .myBtnSave {
   background-color: var(--card-color);
 }
 
-.myBtnDelete {
+.myBtnDelete, .myBtnCancel {
   background-color: var(--tertiary-color);
 }
 
