@@ -1,0 +1,58 @@
+<h1>Your Task</h1>
+
+<!-- async pipe -> is sub on this todoitems observable -->
+<ng-container *ngIf="toDoItems$ | async as toDoItems">
+  <div class="cardContainer">
+    <div class="card" *ngFor="let toDoItem of toDoItems">
+      <div class="cardBody">
+        <div class="field">
+          <!-- isMarked -->
+          <input
+            title="Mark or not"
+            type="checkbox"
+            class="checkbox"
+            [checked]="toDoItem.isMarked"
+            readonly
+          />
+        </div>
+        <!-- title -->
+        <div class="field">
+          <h4 class="fieldtitle">Task</h4>
+          <input
+            title="title"
+            type="text"
+            class="text"
+            [value]="toDoItem.title"
+            readonly
+          />
+        </div>
+        <!-- content -->
+        <div class="field">
+          <h4 class="fieldtitle">Description</h4>
+          <input
+            title="description"
+            type="text"
+            class="text"
+            [value]="toDoItem.content"
+            readonly
+          />
+        </div>
+        <!-- created at  -->
+        <div class="field">
+          <h4 class="fieldtitle">Created</h4>
+          <div class="text">{{toDoItem.createdAt | date: 'MM/dd/yyyy'}}</div>
+        </div>
+        <!-- updated at -->
+        <div class="field">
+          <h4 class="fieldtitle">Upadate</h4>
+          <div class="text">{{toDoItem.updatedAt| date: 'MM/dd/yyyy'}}</div>
+        </div>
+        <!-- edit button -->
+        <button class="myBtn myBtnEdit">Edit</button>
+        <!-- delete button -->
+        <button class="myBtn myBtnDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<!-- (click)="editItem(toDoItem)" -->
