@@ -27,6 +27,21 @@ namespace ToDoListApp.Server.Repositories.Implementation
             return toDoItem;
         }
 
+        // Delete
+        public async Task<ToDoItem?> DeleteAsync(Guid id)
+        {
+            var existingToDoItem = await dbContext.ToDoItems.FirstOrDefaultAsync(x => x.Id == id);
+            
+            if (existingToDoItem is null) 
+            {
+                return null;
+            }
+
+            dbContext.ToDoItems.Remove(existingToDoItem);
+            await dbContext.SaveChangesAsync();
+            return existingToDoItem;
+        }
+
         // Show all
         public async Task<IEnumerable<ToDoItem>> GetAllAsync()
         {
@@ -34,10 +49,26 @@ namespace ToDoListApp.Server.Repositories.Implementation
 
         }
 
+        // Edit
         public async Task<ToDoItem?> GetById(Guid id)
         {
            // is show to do item if is found, or return null
            return await dbContext.ToDoItems.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        // Update
+        public async Task<ToDoItem?> UpdateAsync(ToDoItem toDoItem)
+        {
+            var existingToDoItem = await dbContext.ToDoItems.FirstOrDefaultAsync(x => x.Id == toDoItem.Id);
+
+            if (existingToDoItem != null) 
+            {
+                dbContext.Entry(existingToDoItem).CurrentValues.SetValues(toDoItem);
+                await dbContext.SaveChangesAsync();
+                return toDoItem;
+            }
+
+            return null;
         }
     }
 }
