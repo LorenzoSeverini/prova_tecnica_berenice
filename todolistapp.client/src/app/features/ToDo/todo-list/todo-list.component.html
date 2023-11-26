@@ -39,12 +39,12 @@
         <!-- created at  -->
         <div class="field">
           <h4 class="fieldtitle">Created</h4>
-          <div class="text">{{toDoItem.createdAt | date: 'MM/dd/yyyy'}}</div>
+          <div class="text">{{toDoItem.createdAt | date: 'MM/dd/yyyy HH:mm'}}</div>
         </div>
         <!-- updated at -->
         <div class="field">
           <h4 class="fieldtitle">Upadate</h4>
-          <div class="text">{{toDoItem.updatedAt| date: 'MM/dd/yyyy'}}</div>
+          <div class="text">{{toDoItem.updatedAt| date: 'MM/dd/yyyy HH:mm'}}</div>
         </div>
         <!-- edit button -->
         <button *ngIf="!isInEditMode(toDoItem.id.toString())" class="myBtn myBtnEdit" (click)="onEdit(toDoItem)">Edit</button>
@@ -56,5 +56,25 @@
         <button *ngIf="isInEditMode(toDoItem.id.toString())" class="myBtn myBtnCancel" (click)="onCancel()">Cancel</button>
       </div>
     </div>
+  </div>
+
+  <!-- add new todoitem -->
+  <!-- Button to toggle adding a new item -->
+  <button *ngIf="!isAddingNew" class="myBtn myBtnAddNew" (click)="toggleAddNew()">Add New</button>
+
+  <!-- Form for adding a new to-do item -->
+  <div *ngIf="isAddingNew">
+    <form (ngSubmit)="onSubmitNewToDoItem()">
+      <div class="field">
+        <h4 class="fieldtitle">New Task</h4>
+        <input type="text" class="text" placeholder="Enter title" [(ngModel)]="newToDoItemTitle" name="newTitle"/>
+      </div>
+      <div class="field">
+        <h4 class="fieldtitle">New Description</h4>
+        <input type="text" class="text" placeholder="Enter description" [(ngModel)]="newToDoItemContent" name="newContent"/>
+      </div>
+      <button class="myBtn myBtnSave" type="submit">Add</button>
+      <button type="submit" class="myBtn myBtnCancel" (click)="cancelAddNew()">Cancel</button>
+    </form>
   </div>
 </ng-container>
