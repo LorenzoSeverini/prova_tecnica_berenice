@@ -20,7 +20,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   editedToDoItems: { [key: string]: ToDoItem } = {};
 
-  isAddingNew = false;
+  // isAddingNew = false;
 
   newToDoItemTitle = '';
 
@@ -31,6 +31,10 @@ export class TodoListComponent implements OnInit, OnDestroy {
   editToDoItemSubscription?: Subscription;
 
   toDoItems$?: Observable<ToDoItem[]>;
+
+  // error message for title and content
+  titleErrorMessage: string = '';
+  contentErrorMessage: string = '';
 
   //--------------------------------------
   // constructor function that run when the component is created
@@ -46,18 +50,17 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   //-------------------------------------
   // Add new todo item
-  toggleAddNew() {
-    this.isAddingNew = true;
-  }
 
-  cancelAddNew() {
-    this.isAddingNew = false;
-    this.newToDoItemTitle = '';
-    this.newToDoItemContent = '';
+  // button disabled logic for add new todo item
+  isAddButtonDisabled(): boolean {
+    return this.newToDoItemTitle.trim() === '' || this.newToDoItemContent.trim() === '';
   }
 
   // Submit new todo item form event
   onSubmitNewToDoItem() {
+    this.titleErrorMessage = '';
+    this.contentErrorMessage = '';
+
     const newTodo: AddTodoItemRequest = {
       title: this.newToDoItemTitle,
       content: this.newToDoItemContent
@@ -65,8 +68,21 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
     this.toDoItemService.addToDoItem(newTodo)
       .subscribe(() => {
+        // Validate the fields
+        if (this.newToDoItemTitle.trim() === '') {
+          this.titleErrorMessage = 'Title cannot be empty';
+          return;
+        }
+
+        if (this.newToDoItemContent.trim() === '') {
+          this.contentErrorMessage = 'Content cannot be empty';
+          return;
+        }
+
+        // control if the title and content is not empty, then add the new todo item
+        console.log('Added new item');
         this.toDoItems$ = this.toDoItemService.getAllToDoItems();
-        this.cancelAddNew();
+        // this.cancelAddNew();
       }, error => {
         console.error('Error while adding new item:', error);
       });
