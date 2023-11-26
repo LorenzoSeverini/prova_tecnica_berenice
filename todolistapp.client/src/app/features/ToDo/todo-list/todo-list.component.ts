@@ -1,30 +1,78 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToDoItemService } from '../services/to-do-item.service';
 import { ToDoItem } from '../models/todoItem.model';
 import { Observable } from 'rxjs';
-// import { HttpClient } from '@angular/common/http';
-// import { ToDoItemService } from '../services/to-do-item.service';
-// import { ViewTodoItemRequest } from '../models/todoItem.model';
-// import { AddTodoItemRequest } from '../models/add-todoItem-request.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css']
 })
-export class TodoListComponent implements OnInit {
+export class TodoListComponent implements OnInit, OnDestroy {
 
-  // toDoItems?: ToDoItem [];
+  id: string | null = null;
+
+  editableId: string | null = null;
+
+  editedToDoItems: { [key: string]: ToDoItem } = {};
+
+  paramsSubscription?: Subscription;
+
+  editToDoItemSubscription?: Subscription;
+
   toDoItems$?: Observable<ToDoItem[]>;
 
-  constructor(private toDoItemService: ToDoItemService) {}
+  constructor(
+    private toDoItemService: ToDoItemService,
+    private toDoitemService: ToDoItemService,) {
+  }
 
+  // on init
   ngOnInit(): void {
     this.toDoItems$ = this.toDoItemService.getAllToDoItems();
-    // .subscribe({
-    //   next: (response) => {
-    //     this.toDoItems = response;
-    //   }
-    // });
+  }
+
+  // is in edit mode
+  isInEditMode(id: string): boolean {
+    return this.editableId === id;
+  }
+
+  onEdit(toDoItem: ToDoItem): void {
+    // Use the todoItem parameter here
+    console.log(toDoItem);
+    this.editableId = toDoItem.id.toString();
+    this.editedToDoItems[toDoItem.id] = { ...toDoItem };
+  }
+
+  // Save on click event
+  onSave(toDoItem: ToDoItem): void {
+    this.toDoItemService.updateToDoItem(toDoItem.id.toString(), toDoItem)
+      .subscribe((response) => {
+        console.log('Updated:', response);
+        this.editableId = null;
+      });
+  }
+
+  // Cancel on click event
+  onCancel(): void {
+    this.editableId = null;
+  }
+
+  // Delete on click event
+  onDelete(id: string): void {
+    this.toDoItemService.deleteToDoItem(id)
+      .subscribe({
+        next: () => {
+          console.log('Deleted', id);
+          this.toDoItems$ = this.toDoItemService.getAllToDoItems();
+      }
+    });
+  }
+
+  // destroy
+  ngOnDestroy(): void {
+    this.paramsSubscription?.unsubscribe();
+    this.editToDoItemSubscription?.unsubscribe();
   }
 }
