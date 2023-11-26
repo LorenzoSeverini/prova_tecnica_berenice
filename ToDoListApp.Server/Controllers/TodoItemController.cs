@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoListApp.Server.DbContext;
 using ToDoListApp.Server.Entities;
+using ToDoListApp.Server.Migrations;
 using ToDoListApp.Server.Models.DTO;
 using ToDoListApp.Server.Repositories.Interface;
 
@@ -110,6 +111,70 @@ namespace ToDoListApp.Server.Controllers
 
             return Ok(response);
         }
+
+        // UPDATE
+        // PUT: https://localhost:7259/api/TodoItem/{id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> EditToDoItem([FromRoute] Guid id, UpdateToDoItemRequestDto request)
+        {
+            // convert dto to domain model
+            var toDoItem = new ToDoItem
+            {
+                Id = id,
+                Title = request.Title,
+                Content = request.Content,
+                IsMarked= request.IsMarked,
+            };
+
+            toDoItem =await todoItemRepository.UpdateAsync(toDoItem);
+
+            if (toDoItem == null)
+            {
+                return NotFound();
+            }
+
+            // convert domain to dto
+            var rsponse = new TodoItemDto
+            {
+                Id = toDoItem.Id,
+                Title = toDoItem.Title,
+                Content = toDoItem.Content,
+                IsMarked = toDoItem.IsMarked,
+                CreatedAt = toDoItem.CreatedAt,
+                UpdatedAt = toDoItem.UpdatedAt,
+            };
+
+            return Ok(rsponse);
+        }
+
+
+        // DELETE: https://localhost:7259/api/TodoItem/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteToDoItem([FromRoute] Guid id)
+        {
+            var toDoItem = await todoItemRepository.DeleteAsync(id);
+
+            if (toDoItem is null) 
+            {
+                return NotFound();
+            }
+
+            // convert domain model to dto
+            var response = new TodoItemDto
+            {
+                Id = toDoItem.Id,
+                Title = toDoItem.Title,
+                Content = toDoItem.Content,
+                IsMarked = toDoItem.IsMarked,
+                CreatedAt= DateTime.UtcNow,
+                UpdatedAt= DateTime.UtcNow,
+            };
+
+            return Ok(response);
+        }
+
     }
 }
  
