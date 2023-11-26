@@ -4,7 +4,6 @@ import { TodoListComponent } from './features/ToDo/todo-list/todo-list.component
 import { HomeComponent } from './core/components/home/home.component';
 
 const routes: Routes = [
-  // home page route
   {
     path: '',
     component: HomeComponent,

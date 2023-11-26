@@ -7,13 +7,15 @@ import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { TodoListComponent } from './features/ToDo/todo-list/todo-list.component';
 import { HomeComponent } from './core/components/home/home.component';
 import { FormsModule } from '@angular/forms';
+import { EditToDoItemComponent } from './features/ToDo/edit-to-do-item/edit-to-do-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     TodoListComponent,
-    HomeComponent
+    HomeComponent,
+    EditToDoItemComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, AppRoutingModule, FormsModule
