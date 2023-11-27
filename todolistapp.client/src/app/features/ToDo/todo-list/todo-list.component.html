@@ -1,87 +1,105 @@
 <h1>Your Task</h1>
 
 <!-- async pipe -> is sub on this todoitems observable -->
-<ng-container *ngIf="toDoItems$ | async as toDoItems">
+<ng-container  #content *ngIf="toDoItems$ | async as toDoItems">
 
-  <!-- add new todoitem -->
-  <!---------------------->
   <!-- Form for adding a new to-do item -->
   <form (ngSubmit)="onSubmitNewToDoItem()" class="AddNewToDoItem">
+
     <!-- new title -->
-    <div class="field addNewTitle">
+    <div class="addNewTitle">
       <h4 class="fieldtitle">New Task</h4>
+      <input type="text" class="text newField" placeholder="What do you have planned?" [(ngModel)]="newToDoItemTitle" name="newTitle"/>
       <!-- error for title -->
       <div *ngIf="titleErrorMessage" class="error-message">
         {{ titleErrorMessage }}
       </div>
-      <input type="text" class="text" placeholder="What do you have planned?" [(ngModel)]="newToDoItemTitle" name="newTitle"/>
     </div>
+
     <!-- new content -->
-    <div class="field addNewContent">
+    <div class="addNewContent">
       <h4 class="fieldtitle">New Description</h4>
+      <input type="text" class="text newField" placeholder="Write a description" [(ngModel)]="newToDoItemContent" name="newContent"/>
       <!-- error for content -->
       <div *ngIf="contentErrorMessage" class="error-message">
         {{ contentErrorMessage }}
       </div>
-      <input type="text" class="text" placeholder="Write a description" [(ngModel)]="newToDoItemContent" name="newContent"/>
     </div>
-    <button [disabled]="isAddButtonDisabled()" class="myBtn myBtnSave" type="submit">Add</button>
+    <!-- button to add new to do item -->
+    <button [disabled]="isAddButtonDisabled()" class="myBtn myBtnSave myMarginBottom" type="submit">Add</button>
   </form>
 
-  <!--------------------->
   <!-- To do item view -->
   <div class="cardContainer">
+
+    <!-- Check if there are to-do items, else show a message -->
+    <div *ngIf="toDoItems.length === 0" class="noItemsMessage">
+      <h3>You have no tasks yet.</h3>
+      <h4><strong>Create</strong> a new one!</h4>
+    </div>
+
+    <!-- to do item -->
     <div class="card" *ngFor="let toDoItem of toDoItems">
       <div class="cardBody">
+        <!-- isMarked -->
         <div class="field">
-          <!-- isMarked -->
           <input
             title="Mark or not"
             type="checkbox"
             class="checkbox"
             [checked]="toDoItem.isMarked"
+            (change)="toggleMark(toDoItem)"
           />
         </div>
+
         <!-- title -->
         <div class="field">
-          <h4 class="fieldtitle">Task</h4>
+          <h4 class="fieldtitle" [ngClass]="{ 'markedTitle': toDoItem.isMarked }">Task</h4>
           <input
             title="title"
             type="text"
-            class="text"
+            class="text titleText"
             [(ngModel)]="toDoItem.title"
             [readonly]="!isInEditMode(toDoItem.id.toString())"
+            [ngClass]="{ 'marked': toDoItem.isMarked }"
           />
         </div>
+
         <!-- content -->
         <div class="field">
-          <h4 class="fieldtitle">Description</h4>
+          <h4 class="fieldtitle" [ngClass]="{ 'markedContent': toDoItem.isMarked }">Description</h4>
           <input
             title="description"
             type="text"
             class="text"
             [(ngModel)]="toDoItem.content"
             [readonly]="!isInEditMode(toDoItem.id.toString())"
+            [ngClass]="{ 'marked': toDoItem.isMarked }"
           />
         </div>
+
         <!-- created at  -->
         <div class="field">
           <h4 class="fieldtitle">Date of creation</h4>
           <div class="text">{{toDoItem.createdAt | date: 'MM/dd/yyyy HH:mm'}}</div>
         </div>
+
         <!-- updated at -->
         <div class="field">
           <h4 class="fieldtitle">Last changes</h4>
           <div class="text">{{toDoItem.updatedAt| date: 'MM/dd/yyyy HH:mm'}}</div>
         </div>
-        <!-- edit button -->
-        <button *ngIf="!isInEditMode(toDoItem.id.toString())" class="myBtn myBtnEdit" (click)="onEdit(toDoItem)">Edit</button>
-        <!-- delete button -->
-        <button *ngIf="!isInEditMode(toDoItem.id.toString())" class="myBtn myBtnDelete" (click)="onDelete(toDoItem.id.toString())">Delete</button>
-        <!-- save button -->
-        <button *ngIf="isInEditMode(toDoItem.id.toString())" class="myBtn myBtnSave" (click)="onSave(toDoItem)">Save</button>
-        <!-- cancel button -->
-        <button *ngIf="isInEditMode(toDoItem.id.toString())" class="myBtn myBtnCancel" (click)="onCancel()">Cancel</button>
+
+        <div class="buttonContainer">
+          <!-- edit button -->
+          <button *ngIf="!isInEditMode(toDoItem.id.toString())" class="myBtn myBtnEdit" (click)="onEdit(toDoItem)">Edit</button>
+          <!-- delete button -->
+          <button *ngIf="!isInEditMode(toDoItem.id.toString())" class="myBtn myBtnDelete" (click)="onDelete(toDoItem.id.toString())">Delete</button>
+          <!-- save button -->
+          <button *ngIf="isInEditMode(toDoItem.id.toString())" class="myBtn myBtnSave" (click)="onSave(toDoItem)">Save</button>
+          <!-- cancel button -->
+          <button *ngIf="isInEditMode(toDoItem.id.toString())" class="myBtn myBtnCancel" (click)="onCancel()">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
