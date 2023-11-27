@@ -1,4 +1,5 @@
 /* Css for toDoList component */
+
 h1 {
   text-align: center;
   margin-bottom: 3rem;
@@ -22,9 +23,10 @@ input[type="checkbox"]:checked {
   justify-content: center;
 }
 
-/* .addNewContent, .addNewTitle {
-
-} */
+.marked {
+  text-decoration: line-through;
+  color: var(--card-color);
+}
 
 /********************
   Add new To Do Item
@@ -33,13 +35,46 @@ input[type="checkbox"]:checked {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 4rem;
   margin-bottom: 3rem;
+  border-radius: .5rem;
+  padding: 1.25rem;
+}
+
+.addNewTitle, .addNewContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.newField {
+  width: 15.625rem;
+  height: 2.5rem;
   background-color: var(--section-color);
   border-radius: .5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.25rem;
-  cursor: pointer;
+  margin-bottom: .5rem;
+}
+
+.newField:hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.newField::placeholder {
+  color: var(--quaternary-color);
+  padding-left: .5rem;
+}
+
+/* css for the message show if there aren't to do item  */
+.noItemsMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
 }
 
 /*********
@@ -50,6 +85,7 @@ input[type="checkbox"]:checked {
   flex-direction: column;
   gap: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr));
+  margin-bottom: 5rem;
 }
 
 .card {
@@ -76,13 +112,13 @@ input[type="checkbox"]:checked {
   gap: 0.5rem;
 }
 
-.fieldtitle {
-  font-size: 1.5rem;
-  /* font-weight: bold; */
-}
-
 .text {
   color: var(--quaternary-color);
+  font-size: 1.25rem;
+}
+
+.titleText {
+  color: var(--card-color);
 }
 
 /*********
@@ -108,6 +144,14 @@ input[type="checkbox"]:checked {
   background-color: var(--tertiary-color);
 }
 
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 .checkbox {
   cursor: pointer;
   background-color: var(--tertiary-color);
@@ -125,8 +169,27 @@ input[type="checkbox"]:checked {
   transform: scale(1.05);
 }
 
-/* Media query for tablets */
-@media screen and (max-width: 62rem) {
+/* MEDIA QUERIES */
+
+/* For max 1200px */
+@media screen and (max-width: 75rem) {
+
+  .AddNewToDoItem {
+    align-items: flex-end;
+  }
+
+  .addNewTitle, .addNewContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .myMarginBottom {
+    margin-bottom: .5rem;
+  }
+
   .cardContainer {
     display: flex;
     flex-direction: column;
@@ -148,9 +211,39 @@ input[type="checkbox"]:checked {
   }
 
   .myBtn {
-    width: 100%;
+    width: 100%
+  }
+
+  .myBtn:hover {
+    transition: all 0.3s ease-in-out;
+    transform: none;
+    opacity: 0.8;
   }
 }
+
+/* for max 992 */
+@media screen and (max-width: 62rem) {
+  .AddNewToDoItem {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .addNewTitle, .addNewContent {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .myMarginBottom, .newField {
+    width: 25rem;
+
+  }
+}
+
 
 /* Media query for small screen */
 @media screen and (max-width: 30rem) {
