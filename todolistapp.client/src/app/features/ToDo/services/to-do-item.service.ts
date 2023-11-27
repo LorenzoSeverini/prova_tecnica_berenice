@@ -6,11 +6,13 @@ import { ToDoItem } from '../models/todoItem.model';
 import { environment } from 'src/environments/environment';
 import { UpdateToDoItemRequest } from '../models/update-ToDoItem-request.model';
 
+// service for to do item, which will be used to make http requests to the API
 @Injectable({
   providedIn: 'root'
 })
 export class ToDoItemService {
 
+  // Inject HttpClient
   constructor(private http: HttpClient) {}
 
   // Add to do item

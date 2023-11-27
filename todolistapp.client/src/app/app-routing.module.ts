@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { TodoListComponent } from './features/ToDo/todo-list/todo-list.component';
 import { HomeComponent } from './core/components/home/home.component';
 
+// routes for the app components
+// home page and todo list page
 const routes: Routes = [
   {
     path: '',

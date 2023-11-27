@@ -20,8 +20,6 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   editedToDoItems: { [key: string]: ToDoItem } = {};
 
-  // isAddingNew = false;
-
   newToDoItemTitle = '';
 
   newToDoItemContent = '';
