@@ -7,6 +7,7 @@ import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { TodoListComponent } from './features/ToDo/todo-list/todo-list.component';
 import { HomeComponent } from './core/components/home/home.component';
 import { FormsModule } from '@angular/forms';
+import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { FormsModule } from '@angular/forms';
     NavbarComponent,
     TodoListComponent,
     HomeComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule, AppRoutingModule, FormsModule
