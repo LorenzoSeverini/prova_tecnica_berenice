@@ -21,7 +21,7 @@
 
 .card:hover {
   transition: all 0.3s ease-in-out;
-  transform: scale(1.05);
+  background-color : var(--card-color-hover);
 }
 
 .card h2 {
