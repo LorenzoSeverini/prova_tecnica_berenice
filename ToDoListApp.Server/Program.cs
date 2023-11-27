@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ToDoListApp.Server.Repositories.Interface;
 using ToDoListApp.Server.Repositories.Implementation;
+using ToDoListApp.Server.DbContext.Seeder;
 
 
 namespace ToDoListApp.Server
@@ -28,7 +29,6 @@ namespace ToDoListApp.Server
                 options.UseNpgsql(builder.Configuration.GetConnectionString("TodoListConnectionString"));
             });
             
-            //
             builder.Services.AddScoped<ITodoItemRepository, ToDoItemRepository>();
 
             var app = builder.Build();
@@ -59,6 +59,16 @@ namespace ToDoListApp.Server
             }
 
             app.MapFallbackToFile("/index.html");
+
+            // Seed the database -- try to create some data in the database
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var dbContext = services.GetRequiredService<ToDoListAppDbContext>();
+
+                // Call the seeder logic here
+                DatabaseSeeder.SeedData(dbContext);
+            }
 
             app.Run();
         }

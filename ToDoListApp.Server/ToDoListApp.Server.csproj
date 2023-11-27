@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DbContext\NewFolder1\**" />
+    <Content Remove="DbContext\NewFolder1\**" />
+    <EmbeddedResource Remove="DbContext\NewFolder1\**" />
+    <None Remove="DbContext\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\todolistapp.client\todolistapp.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
