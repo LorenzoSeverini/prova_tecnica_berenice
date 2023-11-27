@@ -13,12 +13,15 @@
 
 ### Backend functionalities
 
+- For testing the api you can use the swagger page: `https://localhost:7259/swagger/index.html` when the project is running.
+
 - The backend is a REST API that exposes the following endpoints:
     - `GET /api/ToDoItem` - returns all the ToDoItem items
     - `GET /api/ToDoItem/{id}` - returns the ToDoItem item with the given id
     - `POST /api/ToDoItem` - creates a new ToDoItem item
     - `PUT /api/ToDoItem/{id}` - updates the ToDoItem item with the given id
     - `DELETE /api/ToDoItem/{id}` - deletes the ToDoItem item with the given id
+
 
 - The ToDoList object is defined as:
 
