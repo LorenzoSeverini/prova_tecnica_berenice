@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToDoItemService } from '../services/to-do-item.service';
 import { ToDoItem } from '../models/todoItem.model';
-import { Observable } from 'rxjs';
+import { Observable, map, of, take } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { AddTodoItemRequest } from '../models/add-todoItem-request.model';
+import { UpdateToDoItemRequest } from '../models/update-ToDoItem-request.model';
 
 @Component({
   selector: 'app-todo-list',
@@ -30,20 +31,24 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   toDoItems$?: Observable<ToDoItem[]>;
 
+  private addToDoItemSubscription?: Subscription;
+
   // error message for title and content
   titleErrorMessage: string = '';
   contentErrorMessage: string = '';
 
   //--------------------------------------
   // constructor function that run when the component is created
-  constructor(
-    private toDoItemService: ToDoItemService,
-    private toDoitemService: ToDoItemService,) {
-  }
+  constructor( private toDoItemService: ToDoItemService,) {}
 
-  // on init
   ngOnInit(): void {
-    this.toDoItems$ = this.toDoItemService.getAllToDoItems();
+    this.toDoItems$ = this.toDoItemService.getAllToDoItems()
+      .pipe(
+        map(toDoItems => toDoItems.sort((a, b) => {
+          // Sort by createdAt in descending order
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }))
+      );
   }
 
   //-------------------------------------
@@ -54,36 +59,49 @@ export class TodoListComponent implements OnInit, OnDestroy {
     return this.newToDoItemTitle.trim() === '' || this.newToDoItemContent.trim() === '';
   }
 
-  // Submit new todo item form event
-  onSubmitNewToDoItem() {
+  // Update the method to return a boolean value
+  onSubmitNewToDoItem(): boolean {
     this.titleErrorMessage = '';
     this.contentErrorMessage = '';
+
+    // Validate the fields
+    if (this.newToDoItemTitle.trim() === '') {
+      this.titleErrorMessage = 'Title cannot be empty';
+      return false;
+    }
+
+    if (this.newToDoItemContent.trim() === '') {
+      this.contentErrorMessage = 'Content cannot be empty';
+      return false;
+    }
 
     const newTodo: AddTodoItemRequest = {
       title: this.newToDoItemTitle,
       content: this.newToDoItemContent
     };
 
-    this.toDoItemService.addToDoItem(newTodo)
-      .subscribe(() => {
-        // Validate the fields
-        if (this.newToDoItemTitle.trim() === '') {
-          this.titleErrorMessage = 'Title cannot be empty';
-          return;
-        }
+    // Add the new todo item
+    this.addToDoItemSubscription = this.toDoItemService.addToDoItem(newTodo)
+      .subscribe({
+        next: () => {
 
-        if (this.newToDoItemContent.trim() === '') {
-          this.contentErrorMessage = 'Content cannot be empty';
-          return;
-        }
+          if (this.toDoItems$) {
+            this.toDoItems$.pipe(take(1)).subscribe(items => {
+              items.unshift();
+              this.toDoItems$ = of([...items]);
+            });
+          }
 
-        // control if the title and content is not empty, then add the new todo item
-        console.log('Added new item');
-        this.toDoItems$ = this.toDoItemService.getAllToDoItems();
-        // this.cancelAddNew();
-      }, error => {
-        console.error('Error while adding new item:', error);
+          // reset input value after adding
+          this.newToDoItemTitle = '';
+          this.newToDoItemContent = '';
+        },
+        // error: (error) => {
+        //   console.error('Error while adding new item:', error);
+        // }
       });
+
+    return true;
   }
 
   // Edit and Update logic
@@ -93,27 +111,55 @@ export class TodoListComponent implements OnInit, OnDestroy {
     return this.editableId === id;
   }
 
+  toggleMark(toDoItem: ToDoItem): void {
+    // Toggle the local isMarked property
+    toDoItem.isMarked = !toDoItem.isMarked;
+
+    // Update the isMarked property in the database
+    const updateRequest: UpdateToDoItemRequest = {
+      title: toDoItem.title,
+      content: toDoItem.content,
+      isMarked: toDoItem.isMarked
+    };
+
+    this.toDoItemService.updateToDoItem(toDoItem.id.toString(), updateRequest)
+      .subscribe(() => {
+
+        // Update the local todo items
+        if (this.toDoItems$) {
+          this.toDoItems$.pipe(take(1)).subscribe(items => {
+            const index = items.findIndex(item => item.id === toDoItem.id);
+            items[index] = toDoItem;
+            this.toDoItems$ = of([...items]);
+          });
+        }
+      });
+  }
+
   onEdit(toDoItem: ToDoItem): void {
     // Use the todoItem parameter here
-    console.log(toDoItem);
     this.editableId = toDoItem.id.toString();
     this.editedToDoItems[toDoItem.id] = { ...toDoItem };
   }
 
   // Save on click event
   onSave(toDoItem: ToDoItem): void {
-    this.toDoItemService.updateToDoItem(toDoItem.id.toString(), toDoItem)
-      .subscribe((response) => {
-        console.log('Updated:', response);
-        this.editableId = null;
-      });
+    const updateRequest: UpdateToDoItemRequest = {
+      title: toDoItem.title,
+      content: toDoItem.content,
+      isMarked: toDoItem.isMarked
+    };
+
+    this.toDoItemService.updateToDoItem(toDoItem.id.toString(), updateRequest)
+    .subscribe(() => {
+      this.editableId = null;
+    });
   }
 
   // Cancel on click event
   onCancel(): void {
     this.editableId = null;
   }
-  //-------------------------------------
 
   //-------------------------------------
   // Delete on click event
@@ -121,7 +167,6 @@ export class TodoListComponent implements OnInit, OnDestroy {
     this.toDoItemService.deleteToDoItem(id)
       .subscribe({
         next: () => {
-          console.log('Deleted', id);
           this.toDoItems$ = this.toDoItemService.getAllToDoItems();
       }
     });
@@ -132,5 +177,6 @@ export class TodoListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.paramsSubscription?.unsubscribe();
     this.editToDoItemSubscription?.unsubscribe();
+    this.addToDoItemSubscription?.unsubscribe();
   }
 }
