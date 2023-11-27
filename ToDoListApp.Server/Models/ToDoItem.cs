@@ -11,13 +11,8 @@ namespace ToDoListApp.Server.Entities
 
         public bool IsMarked { get; set; } = false;
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ToDoItem()
-        { 
-            CreatedAt = DateTime.UtcNow;
-            UpdatedAt = DateTime.UtcNow;
-        }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace ToDoListApp.Server.Models.DTO
+﻿using Npgsql.Internal.TypeHandlers;
+
+namespace ToDoListApp.Server.Models.DTO
 {
     public class UpdateToDoItemRequestDto
     {

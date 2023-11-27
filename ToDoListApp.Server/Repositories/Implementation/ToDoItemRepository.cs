@@ -37,6 +37,7 @@ namespace ToDoListApp.Server.Repositories.Implementation
                 return null;
             }
 
+            // Injecteted services ( save the changes on database using SaveChangesAsync )
             dbContext.ToDoItems.Remove(existingToDoItem);
             await dbContext.SaveChangesAsync();
             return existingToDoItem;
@@ -45,8 +46,8 @@ namespace ToDoListApp.Server.Repositories.Implementation
         // Show all
         public async Task<IEnumerable<ToDoItem>> GetAllAsync()
         {
+            // return all to do items
             return await dbContext.ToDoItems.ToListAsync();
-
         }
 
         // Edit
@@ -63,9 +64,22 @@ namespace ToDoListApp.Server.Repositories.Implementation
 
             if (existingToDoItem != null) 
             {
-                dbContext.Entry(existingToDoItem).CurrentValues.SetValues(toDoItem);
+                dbContext.Entry(existingToDoItem).State = EntityState.Detached; 
+
+                // whit this logic Update only the necessary properties without modifying CreatedAt
+                existingToDoItem.Title = toDoItem.Title;
+                existingToDoItem.Content = toDoItem.Content;
+                existingToDoItem.IsMarked = toDoItem.IsMarked;
+                existingToDoItem.UpdatedAt = DateTime.UtcNow; 
+                
+                // Reattach the entity to the context
+                dbContext.Attach(existingToDoItem);                 
+                // Mark as modified
+                dbContext.Entry(existingToDoItem).State = EntityState.Modified; 
+                
+                // Save the changes
                 await dbContext.SaveChangesAsync();
-                return toDoItem;
+                return existingToDoItem;
             }
 
             return null;
