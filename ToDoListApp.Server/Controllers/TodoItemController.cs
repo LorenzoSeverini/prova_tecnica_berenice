@@ -44,8 +44,8 @@ namespace ToDoListApp.Server.Controllers
                     Title = item.Title,
                     Content = item.Content,
                     IsMarked = item.IsMarked,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
+                    CreatedAt = item.CreatedAt,
+                    UpdatedAt = item.UpdatedAt,
                 });
             }
 
@@ -100,11 +100,10 @@ namespace ToDoListApp.Server.Controllers
             // if is found
             var response = new TodoItemDto
             {
-                Id= existingToDoItem.Id,
+                // Id= existingToDoItem.Id,
                 Title = existingToDoItem.Title,
                 Content = existingToDoItem.Content,
                 IsMarked = existingToDoItem.IsMarked,
-                CreatedAt= existingToDoItem.CreatedAt,
                 UpdatedAt = existingToDoItem.UpdatedAt,
 
             };
@@ -112,6 +111,7 @@ namespace ToDoListApp.Server.Controllers
             return Ok(response);
         }
 
+        //----------------------------------------
         // UPDATE
         // PUT: https://localhost:7259/api/TodoItem/{id}
         [HttpPut]
@@ -142,13 +142,14 @@ namespace ToDoListApp.Server.Controllers
                 Content = toDoItem.Content,
                 IsMarked = toDoItem.IsMarked,
                 CreatedAt = toDoItem.CreatedAt,
-                UpdatedAt = toDoItem.UpdatedAt,
+                UpdatedAt = DateTime.UtcNow,
             };
 
             return Ok(rsponse);
         }
 
-
+        //----------------------------------------
+        // DELETE
         // DELETE: https://localhost:7259/api/TodoItem/{id}
         [HttpDelete]
         [Route("{id:Guid}")]
@@ -174,7 +175,6 @@ namespace ToDoListApp.Server.Controllers
 
             return Ok(response);
         }
-
     }
 }
  
