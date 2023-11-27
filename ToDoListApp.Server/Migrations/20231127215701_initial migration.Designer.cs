@@ -12,8 +12,8 @@ using ToDoListApp.Server.DbContext;
 namespace ToDoListApp.Server.Migrations
 {
     [DbContext(typeof(ToDoListAppDbContext))]
-    [Migration("20231127184453_fix")]
-    partial class fix
+    [Migration("20231127215701_initial migration")]
+    partial class initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

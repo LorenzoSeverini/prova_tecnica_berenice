@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoListApp.Server.DbContext;
 using ToDoListApp.Server.Entities;
-using ToDoListApp.Server.Migrations;
 using ToDoListApp.Server.Models.DTO;
 using ToDoListApp.Server.Repositories.Interface;
 
