@@ -1,5 +1,9 @@
 # ToDo list web application
 
+### Link to the documentation of the project and screenshots
+
+- [Documentation](/documentation.md)
+
 ## Assignment 
 Demonstrate your adaptation and versatility skills as a developer! 
 
