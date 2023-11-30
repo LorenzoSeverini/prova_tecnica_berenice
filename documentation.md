@@ -122,3 +122,13 @@ The MVC pattern is used in the project. The controllers are responsible for hand
 - Core folder there are the components that are used in the app, in this case the navbar and the home component.
 
 - In the features folder there are the components that are used in the app, in this case the todo-list component. Here is handle the logic of the toDoItem, get, post, put, delete, and the logic of the checkbox.
+
+### Screenshots
+
+- Home page
+
+![Home page](/screenshots/homePage.png)
+
+- ToDoList page
+
+![ToDoList page](/screenshots/toDoListPage.png)
